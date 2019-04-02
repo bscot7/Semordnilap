@@ -7,8 +7,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class AppTest {
-    @Test public void testAppHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+    App classUnderTest;
+    public void setUp() {
+        classUnderTest = new App();
+    }
+    @Test public void testAppIsAPalindrome() {
+        assertTrue(classUnderTest.isPalindromeOrSemordnilap("bob"));
+    }
+
+    @Test public void testAppIsNotAPalindrome() {
+        assertTrue(!classUnderTest.isPalindromeOrSemordnilap("Fill"));
     }
 }

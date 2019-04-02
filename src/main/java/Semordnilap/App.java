@@ -3,17 +3,17 @@
  */
 package Semordnilap;
 
+import javax.net.ssl.HttpsURLConnection;
+import java.net.URL;
 import java.util.Scanner;
 
 public class App {
 
+    public static final String oxfordUrl = "https://en.wiktionary.org/wiki/";
+
     public static void main(String[] args) {
-    System.out.println("Welcome to Semordnilap. Please enter a word:");
-    if(isPalindrome(readString())) {
-        System.out.println("That's a palindrome!");
-    } else {
-        System.out.println("That's not a palindrome...");
-    }
+        System.out.println("Welcome to Semordnilap. Please enter a word:");
+        System.out.println(isPalindromeOrSemordnilap(readString()));
     }
 
     private static String readString() {
@@ -21,12 +21,35 @@ public class App {
         return scanner.nextLine();
     }
 
-    private static boolean isPalindrome(String string) {
+    /**
+     * Determines whether a given string is a palindrome or a semordnilap.
+     * @param string
+     * @return boolean
+     */
+    public static String isPalindromeOrSemordnilap(String string) {
         String reverse = new StringBuilder(string).reverse().toString();
         if(reverse.equalsIgnoreCase(string)) {
-            return true;
-        } else {
-            return false;
+            return "That's a palindrome!";
+        } else if (doesWordExistInDict(reverse.toLowerCase())) {
+            return "That's a semordnilap!";
         }
+        return "That's not a palindrome or semordnilap...";
+    }
+
+    public static boolean doesWordExistInDict(String string) {
+        try {
+            URL url = new URL(oxfordUrl + string);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept","application/json");
+            int statusCode = urlConnection.getResponseCode();
+            System.out.println(statusCode);
+            if(statusCode == 200) {
+                return true;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
