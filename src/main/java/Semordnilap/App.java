@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class App {
 
-    public static final String oxfordUrl = "https://en.wiktionary.org/wiki/";
+    public static final String wiktionaryUrl = "https://en.wiktionary.org/wiki/";
 
     public static void main(String[] args) {
         System.out.println("Welcome to Semordnilap. Please enter a word:");
@@ -24,7 +24,7 @@ public class App {
     /**
      * Determines whether a given string is a palindrome or a semordnilap.
      * @param string
-     * @return boolean
+     * @return String
      */
     public static String isPalindromeOrSemordnilap(String string) {
         String reverse = new StringBuilder(string).reverse().toString();
@@ -36,9 +36,15 @@ public class App {
         return "That's not a palindrome or semordnilap...";
     }
 
+    /**
+     * Calls wiktionary to determine whether the word exists or not.
+     * @param string
+     * @return boolean
+     */
+
     public static boolean doesWordExistInDict(String string) {
         try {
-            URL url = new URL(oxfordUrl + string);
+            URL url = new URL(wiktionaryUrl + string);
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept","application/json");
             int statusCode = urlConnection.getResponseCode();
