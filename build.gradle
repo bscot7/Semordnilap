@@ -30,6 +30,7 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:2.+"
 }
 
 // Define the main class for the application

@@ -4,6 +4,9 @@
 package Semordnilap;
 
 import javax.net.ssl.HttpsURLConnection;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -12,8 +15,11 @@ public class App {
     public static final String wiktionaryUrl = "https://en.wiktionary.org/wiki/";
 
     public static void main(String[] args) {
-        System.out.println("Welcome to Semordnilap. Please enter a word:");
-        System.out.println(isPalindromeOrSemordnilap(readString()));
+        boolean doContinue = true;
+        while (doContinue) {
+            System.out.println("Welcome to Semordnilap. Please enter a word:");
+            System.out.println(isPalindromeOrSemordnilap(readString()));
+        }
     }
 
     private static String readString() {
@@ -28,7 +34,7 @@ public class App {
      */
     public static String isPalindromeOrSemordnilap(String string) {
         String reverse = new StringBuilder(string).reverse().toString();
-        if(reverse.equalsIgnoreCase(string)) {
+        if(reverse.equalsIgnoreCase(string) && doesWordExistInDict(reverse.toLowerCase()))  {
             return "That's a palindrome!";
         } else if (doesWordExistInDict(reverse.toLowerCase())) {
             return "That's a semordnilap!";
@@ -41,12 +47,12 @@ public class App {
      * @param string
      * @return boolean
      */
-
     public static boolean doesWordExistInDict(String string) {
         try {
             URL url = new URL(wiktionaryUrl + string);
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept","application/json");
+            System.out.println(getStream(urlConnection));
             int statusCode = urlConnection.getResponseCode();
             System.out.println(statusCode);
             if(statusCode == 200) {
@@ -57,5 +63,15 @@ public class App {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String getStream(HttpsURLConnection conn) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+        StringBuilder sb = new StringBuilder();
+        String output;
+        while ((output = br.readLine()) != null) {
+            sb.append(output);
+        }
+        return sb.toString();
     }
 }

@@ -4,18 +4,27 @@
 package Semordnilap;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import javax.net.ssl.HttpsURLConnection;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AppTest {
+    public HttpsURLConnection mockUrlConn = mock(HttpsURLConnection.class);
     App classUnderTest;
     public void setUp() {
         classUnderTest = new App();
     }
-    @Test public void testAppIsAPalindrome() {
-        assertTrue(classUnderTest.isPalindromeOrSemordnilap("bob"));
+    @Test public void testAppIsAPalindrome() throws IOException {
+        when(mockUrlConn.getResponseCode()).thenReturn(200);
+        assertEquals(classUnderTest.isPalindromeOrSemordnilap("bob"), "That's a palindrome!");
     }
 
-    @Test public void testAppIsNotAPalindrome() {
-        assertTrue(!classUnderTest.isPalindromeOrSemordnilap("Fill"));
+    @Test public void testAppIsNotAPalindrome() throws IOException {
+        when(mockUrlConn.getResponseCode()).thenReturn(404);
+        assertEquals(classUnderTest.isPalindromeOrSemordnilap("Cool"), "That's not a palindrome or semordnilap...");
     }
 }
