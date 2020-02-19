@@ -3,6 +3,7 @@
  */
 package Semordnilap;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -12,19 +13,27 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AppTest {
+public class DetermineTest {
     public HttpsURLConnection mockUrlConn = mock(HttpsURLConnection.class);
-    App classUnderTest;
+    Determine classUnderTest;
+
+    @Before
     public void setUp() {
-        classUnderTest = new App();
+        classUnderTest = new Determine();
     }
+
     @Test public void testAppIsAPalindrome() throws IOException {
         when(mockUrlConn.getResponseCode()).thenReturn(200);
-        assertEquals(classUnderTest.isPalindromeOrSemordnilap("bob"), "That's a palindrome!");
+        assertEquals("That's a palindrome!", classUnderTest.isPalindromeOrSemordnilap("bob"));
     }
 
     @Test public void testAppIsNotAPalindrome() throws IOException {
         when(mockUrlConn.getResponseCode()).thenReturn(404);
-        assertEquals(classUnderTest.isPalindromeOrSemordnilap("Cool"), "That's not a palindrome or semordnilap...");
+        assertEquals("That's not a palindrome or semordnilap...", classUnderTest.isPalindromeOrSemordnilap("Cool"));
+    }
+
+    @Test public void testAppIsASemordnilap() throws IOException {
+        when(mockUrlConn.getResponseCode()).thenReturn(200);
+        assertEquals("That's a semordnilap!", classUnderTest.isPalindromeOrSemordnilap("yob"));
     }
 }
